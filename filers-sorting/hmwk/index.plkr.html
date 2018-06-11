@@ -1,0 +1,53 @@
+<html>
+<head>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <title> Les irreductibles! </title>
+</head>
+<body>
+  <div class="container" id="N1">
+    <h1> Les irreductibles Gaulois (par age) </h1>
+    <ul class="list-group">
+      <!-- render filtered array items using 'v-for' -->
+      <li v-for="person in orderedPeople()" class="list-group-item">
+        {{person.name}} {{person.age}}
+      </li>
+    </ul>
+    <br/>
+    <h1> Les irreductibles Gaulois de plus de 65 ans </h1>
+    <ul class="list-group">
+      <li class="list-group-item" v-for="person in old">
+        {{ person.name }} a {{ person.age }}
+      </li>
+    </ul>
+    <pre> {{ $data }} </pre>
+  </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.16.4/lodash.js"></script>
+<script type="text/javascript">
+  new Vue({
+    el: '.container',
+    data: {
+      people: [
+        {name: "Obelix", age: 33},
+        {name: "Asterix", age: 32},
+        {name: "Majestix", age: 82},
+        {name: "Methusalix", age: 103},
+        {name: "Julius Caesar", age: 66},
+      ]
+    },
+    methods: {
+      orderedPeople: function () {
+        return _.orderBy(this.people, 'age')
+      }
+    },
+    computed: {
+      old: function() {
+        return this.people.filter(function (item) {
+          return item.age > 65;
+        });
+      }
+    },
+});
+</script>
+</html>

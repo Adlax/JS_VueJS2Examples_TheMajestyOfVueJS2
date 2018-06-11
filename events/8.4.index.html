@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+  <title> Events : emit and listen </title>
+</head>
+<body>
+  <div class="container text-center">
+    <h1> Events : emit and listen </h1>
+    <h2> Total counter : </h2>
+    <p style="font-size: 100px;">
+       {{ vote.counter }}
+    </p>
+    <hr/>
+    <button @click="reset()" class="btn btn-danger"> Reset Vote! </button>
+    <hr/>
+    <div class="row">
+      <food @voted="counting" name="Cheeseburger"></food>
+      <food @voted="counting" name="Double Bacon Burger"></food>
+      <food @voted="counting" name="Rodeo Burger"></food>
+    </div>
+    <h1> Historique : </h1>
+    <ul class="list-group">
+      <li class="list-group-item" v-for="log in vote.logs"> {{ log }} </li>
+    </ul>
+  </div>
+  </div>
+</body>
+<template id="food-template">
+  <div class="text-center col-lg-4">
+    <p style="font-size: 40px;">
+      {{ votes }}
+    </p>
+    <button class="btn btn-default" @click="vote"> {{ name }} </button>
+  </div>
+</template>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.js"></script>
+<script type="text/javascript">
+var bus = new Vue();
+new Vue({
+  el: ".container",
+  data: {
+    vote: {
+      counter: 0,
+      logs: [],
+    },
+  },
+  methods: {
+    reset: function(){
+      this.vote = {
+        counter: 0,
+        logs: [],
+      };
+      bus.$emit('reset');
+    },
+    counting: function(text){
+      this.vote.counter++;
+      this.vote.logs.push(text + " a eu un vote");
+    },
+  },
+  created(){
+    bus.$on('voted', this.counting)
+  },
+});
+Vue.component('food', {
+  template: "#food-template",
+  props: ['name'],
+  data: function(){
+    return { votes: 0 };
+  },
+  methods: {
+    vote: function(event){
+      var text = event.srcElement.textContent;
+      this.votes++;
+      bus.$emit('voted', text);
+    },
+    reset: function(){
+      this.votes = 0;
+    },
+  },
+  created(){
+    bus.$on('reset',this.reset);
+  }
+});
+</script>
+</html>

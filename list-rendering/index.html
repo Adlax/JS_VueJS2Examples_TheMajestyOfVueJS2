@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <title> v-for built in directive to lop on lists </title>
+  </head>
+  <body>
+
+    //PREMIER EXAMPLE : SUR UN NOMBRE
+    <div class="container-fluid" id="N1">
+      <h1> Table de multi de 4 </h1>
+      <ul class="list-group">
+        <li class="list-group-item" v-for="i in 11">
+          {{ i-1 }} fois 4 donne : {{ (i-1)*4 }}
+        </li>
+      </ul>
+      <pre>
+        {{ $data }}
+      </pre>
+    </div>
+
+    //DEUXIEME EXAMPLE : SUR UN TABLEAU SIMPLE
+    <div class="container-fluid" id="N2">
+      <h1> Des histoires! </h1>
+      <div>
+        <ul class="list-group">
+          <li class="list-group-item" v-for="story in stories">
+            Il a dit : "{{ story }}"
+          </li>
+        </ul>
+      </div>
+      <pre>
+        {{ $data }}
+      </pre>
+    </div>
+
+    //TROISIEME EXAMPLE : SUR UN TABLEAU D OBJECTS
+    <div class="container-fluid" id="N3">
+      <h1> Des histoires encore! </h1>
+      <div>
+        <ul class="list-group">
+          <li class="list-group-item" v-for="(story, index) in stories">
+            {{ index }}. {{ story.writer }} a dit : "{{ story.plot }}"
+          </li>
+        </ul>
+      </div>
+      <pre>
+        {{ $data }}
+      </pre>
+    </div>
+
+    //QUATRIEME EXAMPLE : SUR LES PROP D UN OBJECTS
+    <div class="container-fluid" id="N4">
+      <h1> Wooohh des histoires a fond! </h1>
+      <div>
+        <ul class="list-group">
+          <li class="list-group-item" v-for="(value, key, index) in story">
+            {{ index }} : {{ key }} : {{ value }}
+          </li>
+        </ul>
+      </div>
+      <pre>
+        {{ $data }}
+      </pre>
+    </div>
+
+  </body>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.js"></script>
+  <script type="text/javascript">
+    new Vue({
+      el: "#N1"
+    });
+    new Vue({
+      el: "#N2",
+      data: {
+        stories: [
+          "STRING1",
+          "STRING2",
+          "STRING3",
+        ]
+      }
+    });
+    new Vue({
+      el: "#N3",
+      data: {
+        stories: [
+        {
+          writer: "Bob",
+          plot: "string1",
+        },
+        {
+          writer: "Phil",
+          plot: "string2",
+        },
+        {
+          writer: "Seksou",
+          plot: "string3",
+        },
+      ]
+      }
+    });
+    new Vue({
+      el: "#N4",
+      data: {
+        story: {
+          writer: "Skrillex",
+          plot: "My name is ... ",
+          upvotes: 57,
+        }
+      }
+    });
+  </script>
+</html>

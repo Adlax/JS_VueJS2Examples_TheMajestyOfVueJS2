@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+  <title> Custom Filter </title>
+</head>
+<body>
+  <div class="container" id="N1">
+    <h1> L'homme derriere le masque </h1>
+    <ul class="list-group">
+      <li class="list-group-item" v-for="hero in heroes">
+        {{ hero | snitch }}
+      </li>
+    </ul>
+  </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.js"></script>
+<script type="text/javascript">
+Vue.filter('snitch', function(hero){
+  return hero.secretId + " est en fait " + hero.firstName + " " + hero.lastName + " dans la vraie vie.";
+});
+new Vue({
+  el: "#N1",
+  data: {
+    heroes: [
+      {secretId: "Batman", firstName: "Bruce", lastName: "Wayne"},
+      {secretId: "sPIDERmAN", firstName: "Peter", lastName: "Parker"},
+      {secretId: "Adlax", firstName: "No...", lastName: "JustKidding"},
+    ],
+  },
+});
+</script>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <title> Components examples </title>
+  </head>
+  <body>
+    <div class="container" id="N1">
+      <h1> Les zistoires </h1>
+      <div>
+        <h3> Celles de Alex </h3>
+        <ul class="list-group">
+          <story v-for="res in storiesBy('Alex')" :story="res"></story>
+        </ul>
+        <h3> Celles de John </h3>
+        <ul class="list-group">
+          <story v-for="res in storiesBy('John')" :story="res"></story>
+        </ul>
+        <div class="form-group">
+          <label for="query"> Que cherchez vous? </label>
+          <input v-model="query" class="form-control">
+        </div>
+        <br />
+        <h3> Resultats de recherche : </h3>
+        <ul class="list-group">
+          <story v-for="res in search" v-bind:story="res"></story>
+        </ul>
+      </div>
+    </div>
+    <template id="story-template">
+      <li class="list-group-item">
+        {{ story.writer }} said "{{ story.body }}"
+      </li>
+    </template>
+  </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.js" type="text/javascript"></script>
+  <script type="text/javascript">
+  new Vue({
+    el: '.container',
+    data: {
+      stories: [
+        {
+          body: "I crashed my car today!",
+          writer: "Alex"
+        },
+        {
+          body: "Yesterday, someone stole my bag!",
+          writer: "John"
+        },
+        {
+          body: "Someone ate my chocolate...",
+          writer: "John"
+        },
+        {
+          body: "I ate someone's chocolate!",
+          writer: "Alex"
+        },
+      ],
+      query: ' '
+    },
+    methods:{
+      storiesBy: function (writer) {
+        return this.stories.filter(function (story) {
+          return story.writer === writer;
+        });
+      }
+    },
+    computed: {
+      search: function () {
+        var query = this.query
+        return this.stories.filter(function (story) {
+          return story.body.includes(query);
+        });
+      }
+    }
+  });
+  Vue.component('story', {
+    template: "#story-template",
+    props: ['story'],
+  });
+  </script>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+  <title> By using a library (here lodash _.orderBy) </title>
+</head>
+<body>
+  <div class="container" id="N1">
+    <h1> Les zistoires, classees grace a une librairie </h1>
+    <ul class="list-group">
+      <li class="list-group-item" v-for="story in sortedStories">
+        {{ story.writer }} a ecrit "{{ story.plot }}" likee {{ story.upvotes }}
+      </li>
+    </ul>
+    <!-- Without using the computed property. -->
+    <ul class="list-group">
+      <li v-for="story in _.orderBy(stories, ['upvotes'], [order])" class="list-group-item">
+        {{ story.writer }} said "{{ story.plot }}" and upvoted {{ story.upvotes }} times.
+      </li>
+    </ul>
+    <button class="btn btn-default" v-on:click="reverseOrder"> Renverser l'ordre </button>
+  </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.16.4/lodash.min.js"></script>
+<script type="text/javascript">
+new Vue({
+  el: "#N1",
+  data: {
+    stories: [
+        {
+            plot: "J AI PETE MA CAISSE!",
+            writer: "Alex",
+            upvotes: 25
+        },
+        {
+            plot: "Omn m a tchoure mon sac Giorgio Pantani",
+            writer: "John",
+            upvotes: 85
+        },
+        {
+            plot: "Ki k a bouffe mon chocolat...",
+            writer: "John",
+            upvotes: 12
+        },
+        {
+            plot: "hmmm...tres bon ce chocolat!",
+            writer: "Alex",
+            upvotes: 56
+        },
+    ],
+    order: 'asc',
+  },
+  methods: {
+    reverseOrder: function(){
+      this.order = (this.order === 'desc')? 'asc' : 'desc';
+    }
+  },
+  computed: {
+    sortedStories: function(){
+      var order = this.order;
+      return _.orderBy(this.stories, ['upvotes'], [order]);
+    }
+  }
+});
+</script>
+</html>

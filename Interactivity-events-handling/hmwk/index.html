@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- //Import bootstrap.css depuis le cdn -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      .container {
+        padding-top: 75px;
+      }
+    </style>
+    <title> Events handling / Events listening , and interactivity </title>
+  </head>
+  <body>
+    <!-- Vote maire -->
+    <div class="container" id="N1">
+      <h1> Gens de vue candidat a la mairie </h1>
+      <ul class="list-group">
+        <li v-for="candidate in candidates" class="list-group-item">
+          Mr. {{ candidate.name }} has : {{ candidate.votes }} votes. <span> <button class="btn btn-default" v-on:click="candidate.votes++"> Vote for him! </button> </span>
+        </li>
+      </ul>
+      <h2> le maire est : {{ mayor.name }} </h2>
+      <input class="form-control" @keyup.delete="reset" placeholder="press key 'del' to reset voting">
+      <pre> {{ $data }} </pre>
+      <pre> {{ mayor }} </pre>
+    </div>
+  </body>
+  <!-- //import vue.js depuis cdn -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.js" type="text/javascript"></script>
+  <script style="text/javascript">
+    new Vue({
+      el: "#N1",
+      data: {
+        candidates: [
+          {
+            name: "Black",
+            votes: 11,
+          },
+          {
+            name: "Pink",
+            votes: 14,
+          },
+          {
+            name: "White",
+            votes: 15,
+          },
+          {
+            name: "Brown",
+            votes: 9,
+          },
+        ]
+      },
+      computed: {
+        mayor: function(){
+            var candidatesSorted = this.candidates.sort(function(a,b){
+              return b.votes - a.votes;
+            });
+            return candidatesSorted[0];
+          },
+      },
+      methods: {
+        // j aurais bien mis un fat arrow dans la fonctiom map mais c du typescript
+        reset: function(){
+          this.candidates = this.candidates.map( function(candidate) {
+            candidate.votes = 0;
+            return candidate;
+          });
+        }
+      },
+    })
+  </script>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title> Ben Hur </title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container" id="N1">
+    <h1> Les chariots sont : </h1>
+    <ul class="list-group">
+      <chariot v-for="chariot in chariots" :chariot="chariot" :pickedChariot="pickedChariot" @select="updatePicked"></chariot>
+    </ul>
+    <pre> {{ $data }} <pre>
+  </div>
+</body>
+<template id="chariot-template">
+  <li class="list-group-item">
+    <h4> {{ chariot.name }} possede <strong>{{ chariot.horses }}</strong> chevaux </h4>
+    <br/>
+    <button class="btn btn-primary" :disabled="isPicked" @click="rideChariot(chariot)"> {{ action }} </button>
+  </li>
+</template>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.js"></script>
+<script type="text/javascript">
+var vue = new Vue({
+  el: "#N1",
+  data: {
+    chariots: [
+      {name: "Olympus", horses: 4},
+      {name: "Sagitta", horses: 3},
+      {name: "Icarus", horses: 2},
+      {name: "Abraxas", horses: 1},
+    ],
+    pickedChariot: {},
+  },
+  methods: {
+    updatePicked: function(chariot){
+      this.pickedChariot = chariot;
+    }
+  },
+});
+Vue.component('chariot', {
+  template: "#chariot-template",
+  props: ['chariot','pickedChariot'],
+  methods: {
+    rideChariot: function(){
+      this.$emit('select', this.chariot);
+    },
+  },
+  computed: {
+    moreHorses: function(){
+      return this.chariot.horses > this.pickedChariot.horses;
+    },
+    lessHorses: function(){
+      return this.chariot.horses < this.pickedChariot.horses;
+    },
+    noPicked: function(){
+      return this.pickedChariot == null;
+    },
+    isPicked: function(){
+      return this.chariot == this.pickedChariot;
+    },
+    action: function(){
+      if(this.noPicked) action = "Pick!";
+      else if(this.isPicked) action = "Riding";
+      else if(!this.noPicked && this.moreHorses) action = "Hire horses";
+      else if(!this.noPicked && this.lessHorses) action = "Dismiss horses";
+      return action;
+    },
+  },
+});
+</script>
+</html>

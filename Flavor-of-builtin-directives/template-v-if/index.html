@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> v-if directive on a template elt example </title>
+  </head>
+  <body>
+    <div id="app">
+      <template v-if="!message">
+        <h1> Envoyez un message a l'aide! </h1>
+        <p> Vite! </p>
+        <p> Au royaumes voisins! </p>
+      </template>
+      <textarea v-model="message"></textarea>
+      <button v-show="message"> Envoyer! </button>
+      <pre> {{ $data }} </pre>
+    </div>
+  </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.4/vue.js"></script>
+  <script>
+    new Vue({
+      el: "#app",
+      data: {
+        message: "Le Roix est mort!"
+      }
+    })
+  </script>
+</html>

@@ -1,0 +1,64 @@
+<html>
+<head>
+  <title> Events : emit and listen </title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container text-center">
+    <h1> Events : emit and listen </h1>
+    <h2> Total counter : </h2>
+    <p style="font-size: 100px;">
+       {{ counter }}
+    </p>
+    <div class="row">
+      <food @voted="counting" name="Cheeseburger"></food>
+      <food @voted="counting" name="Double Bacon Burger"></food>
+      <food @voted="counting" name="Rodeo Burger"></food>
+    </div>
+    <h1> Historique : </h1>
+    <ul class="list-group">
+      <li class="list-group-item" v-for="log in logs"> {{log }} </li>
+    </ul>
+  </div>
+</body>
+<template id="food-template">
+  <div class="text-center col-lg-4">
+    <p style="font-size: 40px;">
+      {{ votes }}
+    </p>
+    <button class="btn btn-default" @click="vote">{{ name }}</button>
+  </div>
+</template>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.js"></script>
+<script type="text/javascript">
+Vue.component('food', {
+  template: '#food-template',
+  props: ['name'],
+  data: function () {
+    return {
+      votes: 0,
+    }
+  },
+  methods: {
+    vote: function(){
+      this.votes++;
+      this.$emit('voted', event.srcElement.textContent);
+    }
+  }
+});
+new Vue({
+  el: '.container',
+  data: {
+    counter: 0,
+    logs: [],
+  },
+  methods:
+  {
+    counting: function(text){
+      this.counter++;
+      this.logs.push(text + ' received a vote.');
+    }
+  },
+});
+</script>
+</html>

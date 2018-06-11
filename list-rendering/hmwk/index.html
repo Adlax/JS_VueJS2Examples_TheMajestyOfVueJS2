@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <title> v-for built in directive to lop on lists </title>
+  </head>
+  <body>
+    <div class="container-fluid" id="N1">
+      <h1> Quoi qu't'es ki!! </h1>
+      <div>
+        <ul class="list-group">
+          <li class="list-group-item" v-for="(value, key, index) in person">
+            {{ index }} : {{ key }} : {{ value }}
+          </li>
+        </ul>
+      </div>
+      <pre>
+        {{ $data }}
+      </pre>
+    </div>
+  </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.js"></script>
+  <script type="text/javascript">
+    new Vue({
+      el: "#N1",
+      data: {
+        person: {
+          name: "Skrillex",
+          age: 415,
+          height: "1m859",
+          weight: "2T",
+          eyeColor: "Granit",
+          favFood: "PindaKaas",
+        }
+      }
+    });
+  </script>
+</html>

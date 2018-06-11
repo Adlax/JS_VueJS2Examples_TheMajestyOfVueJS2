@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title> CRUD ops between a Vue front-end app and a localhosted server/database/API  </title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+</head>
+</body>
+  <div id="N1" class="container">
+    <h1> CRUD exchange between Vue app and localhosted API/db </h1>
+    <h2> Third version </h2>
+    <table class="table table-striped">
+      <tr>
+        <th>#</th>
+        <th>Plot</th>
+        <th>Writer</th>
+        <th>upvotes</th>
+        <th>actions</th>
+      </tr>
+      <tr is="story" v-for="story in stories" :story="story"></tr>
+    </table>
+    <pre> {{ $data }} </pre>
+  </div>
+  <template id="template-story-raw">
+    <tr>
+      <td>
+        {{ story.id }}
+      </td>
+      <td>
+        {{ story.plot }}
+      </td>
+      <td>
+        {{ story.writer }}
+      </td>
+      <td>
+        {{ story.upvotes }}
+      </td>
+      <td>
+        <div class="btn btn-group">
+          <button @click="upvoteStory(story)" class="btn btn-primary"> Upvote! </button>
+        </div>
+      </td>
+    </tr>
+  </template>
+  <p class="lead"> Voila la liste de toutes les zistoires </p>
+  <pre> {{ $data }} </pre>
+</body>
+<script src="https://unpkg.com/vue@2.3.2/dist/vue.js"></script>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script type="text/javascript">
+Vue.component('story', {
+  template: "#template-story-raw",
+  props: ['story'],
+  methods: {
+    upvoteStory: function(story){
+      story.upvotes++;
+      $.ajax({
+        url: '/api/stories/' + story.id,
+        type: 'PATCH',
+        data: story,
+      });
+    },
+  }
+});
+var vm = new Vue({
+  el: "#N1",
+  data: {
+    stories: [],
+  },
+  mounted: function(){
+    $.get('/api/stories', function(data){
+      vm.stories = data;
+    });
+  }
+});
+</script>
+</html>

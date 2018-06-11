@@ -1,0 +1,71 @@
+<html>
+<head>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+  <title> Ben Hur </title>
+</head>
+<body>
+<div class="container" id="N1">
+  <h1> Les chariots sont : </h1>
+  <ul class="list-group">
+    <chariot v-for="chariot in chariots" :chariot="chariot" :picked="picked" @select="updatePicked"></chariot>
+  </ul>
+  <pre>{{ $data }}</pre>
+</div>
+<template id="chariot-template">
+  <li class="list-group-item">
+    <h4> {{ chariot.name }} possede <strong>{{ chariot.horses }}</strong> chevaux </h4>
+    <button @click="rideChariot(chariot)" class="btn btn-primary" :disabled="isPicked"> {{ action }} </button>
+  </li>
+</template>
+</body>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.js"></script>
+<script type="text/javascript">
+  Vue.component('chariot', {
+    props: ['chariot', 'picked'],
+    template: "#chariot-template",
+    methods: {
+      rideChariot: function (chariot) {
+        this.$emit('select', chariot);
+      },
+    },
+    computed: {
+      moreHorses: function () {
+        return this.picked.horses < this.chariot.horses;
+      },
+      isPicked: function () {
+        return this.picked.name == this.chariot.name;
+      },
+      noPicked: function () {
+        return this.picked.name == null;
+      },
+      lessHorses: function(){
+        return this.chariot.horses < this.picked.horses;
+      },
+      action: function () {
+        if (this.noPicked) {action = 'Pick Chariot';}
+        else if (this.isCurrent) {action = 'Riding!';}
+        else if (this.moreHorses) {action = 'Hire Horses';}
+        else if(this.lessHorses){action = 'Dismiss Horses';}
+        return action;
+      }
+    },
+  });
+  new Vue({
+    el: '#N1',
+    data: {
+      chariots: [
+        {name: "Olympus", horses: 4},
+        {name: "Sagitta", horses: 3},
+        {name: "Icarus", horses: 2},
+        {name: "Abraxas", horses: 1},
+      ],
+      picked: {},
+    },
+    methods: {
+      updatePicked: function(chariot){
+        this.picked = chariot;
+      },
+    },
+  });
+</script>
+</html>

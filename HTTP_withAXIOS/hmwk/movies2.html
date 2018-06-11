@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+  <title> Movies Selection </title>
+</head>
+<body>
+  <div id="N1" class="container">
+    <h1> CRUD exchange between Vue app and localhosted API/db </h1>
+    <h2> Movies </h2>
+    <table class="table table-striped">
+      <tr>
+        <td> # </td>
+        <td> Title </td>
+        <td> Director </td>
+        <td> Actions </td>
+      </tr>
+      <tr is="movie" v-for="movie in movies" :movie="movie"></tr>
+    </table>
+    <p class="lead">
+      Ajouter un nouveau film
+      <button class="btn btn-primary" @click="createMovie()"> Ajoutez un film </button>
+    </p>
+    <pre> {{ $data }} </pre>
+  </div>
+  <template id="template-movie-raw">
+    <tr>
+      <td>
+        {{ movie.id }}
+      </td>
+      <td class="col-md-6">
+        <input class="form-control" v-if="movie.editing" v-model="movie.title"></input>
+        <span v-else> {{ movie.title }} </span>
+      </td>
+      <td>
+        <input class="form-control" v-if="movie.editing" v-model="movie.director"></input>
+        <span v-else> {{ movie.director }} </span>
+      </td>
+      <td>
+        <div class="" v-if="!movie.editing">
+          <button class="btn btn-default" @click="editMovie(movie)"> Edit </button>
+          <button class="btn btn-danger" @click="deleteMovie(movie)"> Delete </button>
+        </div>
+        <div class="" v-else>
+          <button class="btn btn-primary" @click="storeMovie(movie)" v-if="!movie.id"> Save movie </button>
+          <button class="btn btn-success" @click="updateMovie(movie)" v-else> Update </button>
+          <button class="btn btn-default" @click="movie.editing=false"> Cancel </button>
+        </div>
+      </td>
+    </tr>
+  </template>
+</body>
+<script src="https://unpkg.com/vue@2.3.2/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script type="text/javascript">
+Vue.component('movie', {
+  template: "#template-movie.raw",
+  props: ['movie'],
+  methods: {
+    editMovie: function(movie){
+      movie.editing = true;
+    },
+    deleteMovie: function(movie){
+      var index = this.$parent.movies.indexOf(movie);
+      vm.movies.splice(index, 1);
+      axios.delete('/api/movies/' + movie.id);
+    },
+    storeMovie: function(movie){
+      vm.movies.push(movie);
+      axios.post('/api/movies', movie)
+        .then(function(response){
+          movie.editing = false;
+          vm.fetchMovies();
+        });
+    },
+    updateMovie: function(movie){
+      axios.patch('/api/movies/' + movie.id, movie);
+      movie.editing = false;
+    },
+  },
+});
+var vm = new Vue({
+  el: "#N1",
+  data: {
+    movies: [],
+  },
+  methods: {
+    createMovie: function(){
+      var newMovie = {
+        title: "",
+        director: "",
+        editing: true,
+      };
+      this.movies.push(newMovie);
+    },
+    fetchMovies: function(){
+      axios.get('/api/movies')
+        .then(function(response){
+          var moviesReady = response.data.map(function(movie){
+            movie.editing = false;
+            return movie;
+          });
+        });
+        vm.movies = moviesReady;
+    },
+  },
+  mounted: function(){
+    this.fetchMovies();
+  },
+});
+</script>
+</html>

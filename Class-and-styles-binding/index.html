@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title> Class and Styles binding </title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container-fluid">
+  <div class="container text-center" id="N1">
+    <div class="box" v-bind:class="[color? 'red' : 'blue']" ></div>
+    <div class="box" v-bind:class="[color? 'purple' : 'green']" ></div>
+    <div class="box" v-bind:class="[color? 'red' : 'blue']" ></div>
+    <div class="box" v-bind:class="[color? 'purple' : 'green']" ></div>
+    <button v-on:click="toggleColor" class="btn btn-block btn-success"> change colors </button>
+    <hr/>
+    <div v-bind:style="[style1, style2]" > Ho c beau </div>
+    <hr/>
+  </div>
+  <div id="N2">
+    <ul class="list-group">
+      <li :class="{'completed': task.done}" :style="styleObject" v-for="task in tasks">
+        {{ task.body }}
+        <button class="btn" @click="completeTask(task)"> Done/Undone </button>
+      </li>
+    </ul>
+  </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.js"></script>
+<script type="text/javascript">
+new Vue({
+  el: '#N1',
+  data: {
+    color: true,
+    style1: {
+      color: "blue",
+      fontSize: "20px",
+    },
+    style2: {
+      fontStyle: "italic",
+    },
+  },
+  methods: {
+    toggleColor: function() {
+      this.color = !this.color;
+    }
+  }
+});
+new Vue({
+  el: "#N2",
+  data: {
+    tasks: [
+      {body: "Feed the horses", done: true},
+      {body: "Wash armor", done: true},
+      {body: "Sharp sword", done: false},
+    ],
+    styleObject: {
+      fontSize: "25px",
+    },
+  },
+  methods: {
+    completeTask: function(task){
+      task.done = !task.done;
+    }
+  },
+});
+</script>
+<style type="text/css">
+  .red {
+    background: #ff0000;
+  }
+  .blue {
+    background: #0000ff;
+  }
+  .purple {
+    background: #7B1FA2;
+  }
+  .green {
+    background: #4CAF50;
+  }
+  .box {
+    float: left;
+    width: 50px;
+    height: 50px;
+    margin: 40px;
+    border: 1px solid rgba(0, 0, 0, .2);
+  }
+  .completed{
+    text-decoration: line-through;
+  }
+</style>
+</html>

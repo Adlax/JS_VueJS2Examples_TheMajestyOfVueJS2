@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"  rel="stylesheet">
+  <title> Planets hmwk </title>
+</head>
+<body>
+  <div class="container" id="N1">
+    <h1> Voyage intergalactique. Ou voulez vous allez? </h1>
+    <ul class="list-group">
+      <planet v-for="planet in planets" v-bind:astre="planet"></planet>
+    </ul>
+    <pre> {{ $data }} </pre>
+  </div>
+  <template id="planet-template">
+    <li class="list-group-item" >
+      {{ planet.name }} a ete visitee {{ planet.visits }} fois.
+      <button class="btn btn-primary" v-show="!planet.visits<4" @click="upVisit()"> Visiter! </button>
+      <span class="glyphicon glyphicon-star pull-right" aria-hidden="true" v-show="planet.visits>0"></span>
+    </li>
+  </template>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.js"></script>
+<script type="text/javascript">
+  new Vue({
+    el: "#N1",
+    data :{
+      planets: [
+        {
+          name: "Jupiter",
+          visits: 0,
+        },
+        {
+          name: "Saturn",
+          visits: 0,
+        },
+        {
+          name: "Uranus",
+          visits: 0,
+        },
+        {
+          name: "Venus",
+          visits: 0,
+        },
+      ],
+    },
+    methods: {
+    },
+    computed: {
+    },
+  });
+  Vue.component('planet', {
+    props: ['astre'],
+    template: "#planet-template",
+    methods: {
+      upVisit: function(){
+        this.visits *= 1;
+      }
+    },
+  });
+</script>
+</html>

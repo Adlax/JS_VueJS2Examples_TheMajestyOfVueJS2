@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"  rel="stylesheet">
+  <title> Custom Exercice </title>
+</head>
+<body>
+  <div class="container" id="N1">
+    <h1> Les irreductibles Gaulois (par age) </h1>
+    <ul class="list-group">
+      <pers v-for="person in personsByAge" v-bind:pers="person"></pers>
+    </ul>
+    <br/>
+    <h1> Les irreductibles Gaulois de plus de 65 ans </h1>
+    <ul class="list-group">
+      <pers v-for="person in personsAbove65" v-bind:pers="person"></pers>
+    </ul>
+    <pre> {{ $data }} </pre>
+  </div>
+  <template id="pers-template">
+    <li class="list-group-item" >
+      {{ person.name }} is {{ person.age }}
+    </li>
+  </template>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.js"></script>
+<script type="text/javascript">
+  new Vue({
+    el: "#N1",
+    data :{
+      persons: [
+        {
+          name: "Asterix",
+          age: 36,
+        },
+        {
+          name: "Obelixix",
+          age: 33,
+        },
+        {
+          name: "AgeCanonix",
+          age: 120,
+        },
+        {
+          name: "Panoramix",
+          age: 69,
+        },
+      ],
+    },
+    methods: {
+
+    },
+    computed: {
+      personsByAge: function(){
+        return this.persons.sort(function(a,b){
+          return a.age - b.age;
+        });
+      }
+      personsAbove65: function(){
+        return this.persons.filter(function(item){
+          return item.age>65;
+        });
+      }
+    },
+  });
+  Vue.component('pers', {
+    props: ['person'],
+    template: "#pers-template",
+  });
+</script>
+</html>

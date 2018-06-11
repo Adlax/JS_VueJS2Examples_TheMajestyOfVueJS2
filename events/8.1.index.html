@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+  <title> Events : emit and listen </title>
+</head>
+<body>
+  <div class="container text-center">
+    <h1> Events : emit and listen </h1>
+    <p style="font-size: 100px;">
+      {{ votes }}
+    <p>
+    <button class="btn btn-primary" @click="vote"> Votez! </button>
+  </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.js"></script>
+<script type="text/javascript">
+  new Vue({
+  el: '.container',
+  data: {
+    votes: 0
+  },
+  methods: {
+    vote: function () {
+      this.$emit('voted');
+    }
+  },
+  created () {
+    this.$on('voted', function(){
+      this.votes++;
+
+    });
+  },
+});
+</script>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <title> hmwk </title>
+  </head>
+  <body>
+    <div class="container">
+      <div v-if="gender == 'male' || gender == 'female'">
+        <h1>
+          <span v-if="gender == 'male'"> Hello, Mr {{ name }}</span>
+          <span v-if="gender == 'female'"> Hello, Miss {{ name }}</span>
+        </h1>
+      </div>
+      <div v-else>
+        <h1>
+          <span> So you cant decide...?! </span>
+        </h1>
+      </div>
+      <label for="gender"> Gender : </label><br/>
+      <input id="gender" type="text" class="form-control" v-model="gender"><br/>
+      <label for="name"> Name : </label><br/>
+      <input id="name" type="text" class="form-control" v-model="name"></br/>
+      <pre> {{ data }} </pre>
+    </div>
+  </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.4/vue.js"></script>
+  <script type="type/javascript">
+  new Vue({
+    el: ".container",
+    data: {
+      gender: "male",
+      name: "The Duc!",
+    },
+  })
+  </script>
+</html>

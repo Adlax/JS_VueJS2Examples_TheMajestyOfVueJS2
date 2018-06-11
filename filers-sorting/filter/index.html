@@ -1,0 +1,104 @@
+<html>
+<head>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <title> Histoires fantastiques </title>
+</head>
+<body>
+    <div class="container" id="N1">
+        <h1> Le meilleur des zistoires </h1>
+        <div>
+            <h3> Celles de Alex </h3>
+            <ul class="list-group">
+                <li v-for="story in storiesBy('Alex')"
+                    class="list-group-item"
+                >
+                    {{ story.writer }} a ecrit "{{ story.plot }}"
+                </li>
+            </ul>
+            <h3> Celles de John </h3>
+            <ul class="list-group">
+                <li v-for="story in storiesBy('John')"
+                    class="list-group-item"
+                >
+                    {{ story.writer }} a ecrit "{{ story.plot }}"
+                </li>
+            </ul>
+        </div>
+        <h1> Les zistoires les plus lues ({{ famous.length }}) :</h1>
+        <ul class="list-group">
+          <li class="list-group-item" v-for="story in famous">
+            {{ story.writer }} a ecrit "{{ story.plot }}" likee {{ story.upvotes }}
+          </li>
+        </ul>
+        <div>
+          <div class="form-group">
+            <label for="query"> Votre mot clef: </label>
+            <input type="text" v-model="query" class="form-control">
+          </div>
+          <h3> Resultats de recherches : </h3>
+          <div>
+            <ul class="list-group">
+              <li class="list-group-item" v-for="result in search">
+                {{ result.writer }} a ecrit : "{{ result.plot }}"
+              </li>
+            </ul>
+          </div>
+        </div>
+        <pre>
+            {{ $data }}
+        </pre>
+    </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.js"></script>
+<script type="text/javascript">
+new Vue({
+    el: '#N1',
+    data: {
+        stories: [
+            {
+                plot: "J AI PETE MA CAISSE!",
+                writer: "Alex",
+                upvotes: 25
+            },
+            {
+                plot: "Omn m a tchoure mon sac Giorgio Pantani",
+                writer: "John",
+                upvotes: 85
+            },
+            {
+                plot: "Ki k a bouffe mon chocolat...",
+                writer: "John",
+                upvotes: 12
+            },
+            {
+                plot: "hmmm...tres bon ce chocolat!",
+                writer: "Alex",
+                upvotes: 56
+            },
+        ],
+        query: "",
+    },
+    methods:
+    {
+      storiesBy: function (writer) {
+        return this.stories.filter(function (story) {
+          return story.writer === writer;
+        });
+      }
+    },
+    computed: {
+      famous: function(){
+        return this.stories.filter(function(item){
+          return item.upvotes > 25;
+        });
+      },
+      search: function(){
+        var query = this.query;
+        return this.stories.filter(function(item){
+          return item.plot.includes(query);
+        });
+      }
+    },
+})
+</script>
+</html>

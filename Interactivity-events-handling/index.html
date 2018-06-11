@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- //Import bootstrap.css depuis le cdn -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      .container {
+        padding-top: 75px;
+      }
+    </style>
+    <title> Events handling / Events listening , and interactivity </title>
+  </head>
+  <body>
+
+    <!-- bouton simple -->
+    <div class="container" id="N1">
+      <button class="btn btn-primary btn-lg btn-block" v-on:click="upVote"> Give a thumb up! ({{ upvotes }})</button>
+    </div>
+
+    <!-- Calculette -->
+    <div class="container" id="N2">
+      <h1> Choisissez deux nombres et un operateur </h1>
+      <form class="form-inline">
+        <input v-model.number="a" class="form-control">
+        <select v-model="operator" class="form-control">
+          <option> + </option>
+          <option> - </option>
+          <option> * </option>
+          <option> / </opton>
+        </select>
+        <input v-model.number="b" class="form-control">
+        <button type="submit" @click="calculate"> Calculez </button>
+        <!-- ou encore v-on:click="calculate" -->
+      </form>
+      <h2> le resultat est : {{ a }} {{ operator }} {{ b }} = {{ c }} </h2>
+      <pre> {{ $data }} </pre>
+    </div>
+
+    <!-- Calculette (bis) -->
+    <div class="container" id="N3">
+      <h1> Choisissez deux nombres et un operateur </h1>
+      <form class="form-inline">
+        <input v-model.number="a" class="form-control">
+        <select v-model="operator" class="form-control">
+          <option> + </option>
+          <option> - </option>
+          <option> * </option>
+          <option> / </opton>
+        </select>
+        <input v-model.number="b" class="form-control">
+        <!--
+          <button type="submit" @click="calculate"> Calculez </button>
+        -->
+        <!-- ou encore v-on:click="calculate" -->
+      </form>
+      <h2> le resultat est : {{ a }} {{ operator }} {{ b }} = {{ c }} </h2>
+      <pre> {{ $data }} </pre>
+    </div>
+
+  </body>
+  <!-- //import vue.js depuis cdn -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.js" type="text/javascript"></script>
+  <script style="text/javascript">
+    new Vue({
+      el: "#N1",
+      data: {
+        upvotes: 0,
+      },
+      methods: {
+        upVote: function(){
+          this.upvotes++;
+        }
+      },
+    });
+    new Vue({
+      el: "#N2",
+      data: {
+        a: 1,
+        b: 2,
+        c: null,
+        operator: "+",
+      },
+      methods: {
+        calculate: function(event) {
+          event.preventDefault();
+          switch(this.operator){
+            case "+":
+              this.c = this.a + this.b;
+              break;
+            case "-":
+              this.c = this.a - this.b;
+              break;
+            case "*":
+              this.c = this.a * this.b;
+              break;
+            case "/":
+              this.c = this.a / this.b;
+              break;
+          }
+        }
+      },
+    });
+    new Vue({
+      el: "#N3",
+      data: {
+        a: 1,
+        b: 2,
+        operator: "+",
+      },
+      computed: {
+        c: function(){
+          switch(this.operator){
+            case "+":
+              return this.a + this.b;
+              break;
+            case "-":
+              return this.a - this.b;
+              break;
+            case "*":
+              return this.a * this.b;
+              break;
+            case "/":
+              return this.a / this.b;
+              break;
+          }
+        }
+      }
+    })
+  </script>
+</html>

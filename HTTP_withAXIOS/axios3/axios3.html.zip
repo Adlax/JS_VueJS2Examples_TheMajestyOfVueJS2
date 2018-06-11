@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title> CRUD ops Vue/API using AXIOS HTTP library.   </title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+</head>
+</body>
+  <div id="N1" class="container">
+    <h1> CRUD exchange between Vue app and localhosted API/db </h1>
+    <h2> Axios version </h2>
+    <table class="table table-striped">
+      <tr>
+        <th>#</th>
+        <th>Plot</th>
+        <th>Writer</th>
+        <th>upvotes</th>
+        <th>actions</th>
+      </tr>
+      <tr is="story" v-for="story in stories" :story="story"></tr>
+    </table>
+    <p class="lead">
+      Liste des histoires
+      <button @click="createStory()" class="btn btn-primary"> Ajouter une histoire </button>
+    </p>
+    <pre> {{ $data }} </pre>
+  </div>
+  <template id="template-story-raw">
+    <tr>
+      <td>
+        {{ story.id }}
+      </td>
+      <td class="col-md-6">
+        <input v-if="story.editing" v-model="story.plot" class="form-control"></input>
+        <span v-else> {{ story.plot }} </span>
+      </td>
+      <td>
+        <input v-if="story.editing" v-model="story.writer" class="form-control"></input>
+        <span v-else> {{ story.writer }} </span>
+      </td>
+      <td>
+        {{ story.upvotes }}
+      </td>
+      <td>
+        <div class="btn btn-group" v-if="!story.editing">
+          <button @click="upvoteStory(story)" class="btn btn-primary"> Upvote! </button>
+          <button @click="editStory(story)" class="btn btn-default"> Edit! </button>
+          <buton @click="deleteStory(story)" class="btn btn-danger"> Delete! </button>
+        </div>
+        <div class="btn btn-group" v-else>
+          <button v-if="story.id" @click="updateStory(story)" class="btn btn-primary"> Update story! </button>
+          <button v-else @click="storeStory(story)" class="btn btn-success"> Save new story! </button>
+          <button @click="story.editing=false" class="btn btn-default"> Cancel editing </button>
+        </div>
+      </td>
+    </tr>
+  </template>
+  <p class="lead"> Voila la liste de toutes les zistoires </p>
+  <pre> {{ $data }} </pre>
+</body>
+<script src="https://unpkg.com/vue@2.3.2/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<!--  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script> -->
+<script type="text/javascript">
+Vue.component('story', {
+  template: "#template-story-raw",
+  props: ['story'],
+  methods: {
+    upvoteStory: function(story){
+      story.upvotes++;
+      axios.patch('/api/stories/' + story.id, story);
+    },
+    deleteStory: function(story){
+      var index = this.$parent.stories.indexOf(story);
+      this.$parent.stories.splice(index, 1);
+      axios.delete('/api/stories/' + story.id);
+    },
+    editStory: function(story){
+      story.editing = true;
+    },
+    updateStory: function(story){
+      axios.patch('/api/stories/' + story.id, story);
+      story.editing = false;
+    },
+    storeStory: function(story){
+      axios.post('/api/stories/', story)
+        .then(function(){
+          story.editing=false;
+          vm.fetchStories();
+        });
+    },
+  }
+});
+var vm = new Vue({
+  el: "#N1",
+  data: {
+    stories: [],
+  },
+  methods: {
+    createStory: function(){
+      var newStory = {
+        plot: "",
+        upvotes: 0,
+        editing: true,
+      };
+      this.stories.push(newStory);
+    },
+    fetchStories: function(){
+      axios.get('/api/stories')
+        .then(function(response){
+          var storiesReady = response.data.map(function(story){
+            story.editing = false;
+            return story;
+          });
+          vm.stories = storiesReady;
+          // ou aussi Vue.set(vm, 'stories', storiesReady);
+        });
+    },
+  },
+  mounted: function(){
+    this.fetchStories();
+  },
+});
+</script>
+</html>
